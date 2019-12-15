@@ -1,15 +1,13 @@
 import sys
 import time
 def criarjogo(x,y):
-	#adicona um buff para nao bugar
+	#adicona 1 para nao bugar
 	x += 1
-	#multiplica 0, pelas veses x
 	finalx = "0,"*x
 	#multiplica as linhas pelas colunas
 	final = finalx*y
 	#remove o "," que fica no final
 	final = final[:-1]
-	#salva a varivel
 	exec("final = ["+final+"]")
 	#adiciona o personagem
 	final[1] = 1
@@ -41,28 +39,19 @@ help = """
 """
 
 def GPU(base):
-	#limpa a tela de forma rapida sem precisar de chamar nenhum modulo
-	print "\n" * 40
-	#imprime os valores um por um
-	saida = ""
+	saida = "\n" * 40
 	for x in range(0,len(base)):
-		h = str(base[x])
-		#substitui os valores por algo que de para entender
-		h = h.replace("0"," ")
-		h = h.replace("1",">")
-		h = h.replace("2","*")
-		h = h.replace("4","-")
-		h = h.replace("5","*")
-		h = h.replace("6","()")
+		#  Substitui os valores por algo que de para entender
+		h = str(base[x]).replace("0"," ").replace("1",">").replace("2","*").replace("4","-").replace("5","*").replace("6","()")
 		if x % linhasx:
-			
 			saida += str(h)
 						
 		else:
 			saida += str(h)
 			saida += "\n"
 	
-	print saida
+	sys.stdout.write(saida)
+	sys.stdout.flush()
 def s(base,x):
 	#scaneia a area do jogo para procurar o jogador
 	while x < len(base):
@@ -116,8 +105,7 @@ def tick(base,t,ordaa):
 			base[x] == 0
 		#coloca os inimigos 1 casa a frente
 		if base[x] == 2:
-			h = x
-			h = h - 1
+			h = x - 1
 			if h % linhasx:
 				#se uma casa a frente do inimigo for o personagem ele manda a base para ser processada e encerra o jogo
 				if base[h] == 1:
@@ -129,7 +117,7 @@ def tick(base,t,ordaa):
 				#detecta se o inimigo colidiu com o tiro (precisa de ajutes)
 					if base[h-1] == 4:
 						# cria explosao
-						base[x ] = 6
+						base[x] = 6
 						# apaga o tiro
 						base[h-1] = 0
 					else:
@@ -172,6 +160,7 @@ def tick(base,t,ordaa):
 	
 def orda(base,h,ordaa):
 	#adiciona inimigos nas linhas correspondentes
+	# TODO Melhorar isso
 	try:
 		base[9] = ordaa[h]
 		base[18] = ordaa[h+9]
@@ -183,7 +172,6 @@ def orda(base,h,ordaa):
 	if h % 9:
 		pass
 	else:
-		#se o h for divisivel pela largura
 		h = 0
 	return base,h
 	
@@ -212,7 +200,7 @@ while True:
 		print help
 	
 	x = raw_input("mov :")
-	
+	jogada = False
 	if x != "":
 		#jogo nao fechar caso escreva uma letra errada
 		try:
